@@ -1,0 +1,304 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+
+}
+
+model user {
+  id         String   @id
+  stxAddress String   @unique
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @default(now())
+
+  userRole userRole[]
+  session  session[]
+
+  Sender                notification[]          @relation("Sender")
+  Recipient             notification[]          @relation("Recipient")
+  userApplicationFollow userApplicationFollow[]
+  comment               comment[]
+  commentMention        commentMention[]
+  applicationMember     applicationMember[]
+  answer                answer[]
+  revision              revision[]
+  application           application[]
+}
+
+model role {
+  id               Int                @id @unique @default(autoincrement())
+  name             String
+  description      String
+  createdAt        DateTime           @default(now())
+  userRole         userRole[]
+  notificationType notificationType[]
+}
+
+model userRole {
+  id Int @id @unique @default(autoincrement())
+
+  userId String
+  roleId Int
+
+  user user @relation(fields: [userId], references: [id])
+  role role @relation(fields: [roleId], references: [id])
+
+
+  @@unique([userId, roleId])
+}
+
+model notificationType {
+  id        Int      @id @unique @default(autoincrement())
+  name      String
+  roleId    Int
+  template  String
+  createdAt DateTime @default(now())
+
+  role role @relation(fields: [roleId], references: [id])
+
+  notification notification[]
+}
+
+model notification {
+  id            Int      @id @unique @default(autoincrement())
+  typeId        Int
+  applicationId Int
+  senderId      String
+  recipientId   String
+  message       String
+  isRead        Boolean
+  createdAt     DateTime @default(now())
+
+  sender    user @relation("Sender", fields: [senderId], references: [id])
+  recipient user @relation("Recipient", fields: [recipientId], references: [id])
+
+
+  type        notificationType @relation(fields: [typeId], references: [id])
+  application application      @relation(fields: [applicationId], references: [id])
+}
+
+model session {
+  id               Int      @id @unique @default(autoincrement())
+  userId           String
+  refreshTokenHash String?
+  device           String
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @default(now())
+
+  user user @relation(fields: [userId], references: [id])
+
+  @@unique([userId, device])
+}
+
+model userApplicationFollow {
+  id Int @id @unique @default(autoincrement())
+
+  userId        String
+  applicationId Int
+  createdAt     DateTime @default(now())
+
+  user        user        @relation(fields: [userId], references: [id])
+  application application @relation(fields: [applicationId], references: [id])
+
+
+  @@unique([userId, applicationId])
+}
+
+model application {
+  id        Int      @id @unique @default(autoincrement())
+  title     String
+  userId    String
+  typeId    Int
+  statusId  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  user                  user                    @relation(fields: [userId], references: [id])
+  userApplicationFollow userApplicationFollow[]
+  payment               payment[]
+
+  type   applicationType   @relation(fields: [typeId], references: [id])
+  status applicationStatus @relation(fields: [statusId], references: [id])
+
+  commentMention       commentMention[]
+  applicationMember    applicationMember[]
+  answer               answer[]
+  revision             revision[]
+  applicationComponent applicationComponent[]
+  notification         notification[]
+  comment              comment[]
+
+}
+
+model payment {
+  id            Int @id @unique @default(autoincrement())
+  applicationId Int
+  typeId        Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  application application @relation(fields: [applicationId], references: [id])
+  type        paymentType @relation(fields: [typeId], references: [id])
+}
+
+model paymentType {
+  id        Int      @id @unique @default(autoincrement())
+  name      String
+  createdAt DateTime @default(now())
+
+  payment payment[]
+}
+
+model applicationStatus {
+  id          Int           @id @unique @default(autoincrement())
+  name        String
+  description String
+  createdAt   DateTime      @default(now())
+  application application[]
+}
+
+model applicationType {
+  id   Int    @id @unique @default(autoincrement())
+  name String
+
+  createdAt   DateTime      @default(now())
+  application application[]
+}
+
+model comment {
+  id              Int      @id @unique @default(autoincrement())
+  userId          String
+  text            String
+  parentCommentId Int
+  applicationId   Int
+  componentId     Int
+  createdAt       DateTime @default(now())
+
+
+  user          user        @relation(fields: [userId], references: [id])
+  application   application @relation(fields: [applicationId], references: [id])
+  parentComment comment     @relation("ParentComment", fields: [parentCommentId], references: [id])
+  component     component   @relation(fields: [componentId], references: [id])
+
+  ParentComment comment[] @relation("ParentComment")
+}
+
+model commentMention {
+  id                     Int      @id @unique @default(autoincrement())
+  userIdMentioned        String
+  applicationIdMentioned Int
+  createdAt              DateTime @default(now())
+
+  user        user        @relation(fields: [userIdMentioned], references: [id])
+  application application @relation(fields: [applicationIdMentioned], references: [id])
+}
+
+model applicationMember {
+  id            Int      @id @unique @default(autoincrement())
+  userId        String
+  applicationId Int
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @default(now())
+
+
+
+  user        user        @relation(fields: [userId], references: [id])
+  application application @relation(fields: [applicationId], references: [id])
+
+
+  @@unique([userId, applicationId])
+}
+
+model applicationComponent {
+  id Int @id @unique @default(autoincrement())
+
+  applicationId Int
+  componentId   Int
+  order         Int
+
+  application application @relation(fields: [applicationId], references: [id])
+  component   component   @relation(fields: [componentId], references: [id])
+}
+
+model component {
+  id                   Int                    @id @unique @default(autoincrement())
+  name                 String
+  questionComponent    questionComponent[]
+  applicationComponent applicationComponent[]
+  comment              comment[]
+}
+
+model revision {
+  id            Int      @id @unique @default(autoincrement())
+  userId        String
+  applicationId Int
+  questionId    Int
+  optionId      Int
+  answer        String
+  createdAt     DateTime @default(now())
+
+  user        user           @relation(fields: [userId], references: [id])
+  application application    @relation(fields: [applicationId], references: [id])
+  question    question       @relation(fields: [questionId], references: [id])
+  option      questionOption @relation(fields: [optionId], references: [id])
+}
+
+model question {
+  id   Int    @id @unique @default(autoincrement())
+  text String
+
+  createdAt         DateTime            @default(now())
+  questionComponent questionComponent[]
+  revision          revision[]
+  answer            answer[]
+}
+
+model questionOption {
+  id        Int      @id @unique @default(autoincrement())
+  groupId   Int
+  order     Int
+  text      String
+  createdAt DateTime @default(now())
+
+  group optionGroup @relation(fields: [groupId], references: [id])
+
+  revision revision[]
+  answer   answer[]
+}
+
+model optionGroup {
+  id             Int              @id @unique @default(autoincrement())
+  name           String
+  questionOption questionOption[]
+}
+
+model answer {
+  id Int @id @unique @default(autoincrement())
+
+  userId        String
+  applicationId Int
+  questionId    Int
+  optionId      Int
+  answer        String
+  createdAt     DateTime @default(now())
+
+  user        user           @relation(fields: [userId], references: [id])
+  application application    @relation(fields: [applicationId], references: [id])
+  question    question       @relation(fields: [questionId], references: [id])
+  option      questionOption @relation(fields: [optionId], references: [id])
+}
+
+model questionComponent {
+  id Int @id @unique @default(autoincrement())
+
+  questionId  Int
+  componentId Int
+  orderId     Int
+
+  question  question  @relation(fields: [questionId], references: [id])
+  component component @relation(fields: [componentId], references: [id])
+}
