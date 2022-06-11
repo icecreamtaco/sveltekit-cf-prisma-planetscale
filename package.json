@@ -19,6 +19,7 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@sveltejs/adapter-cloudflare": "^1.0.0-next.23"
+		"@sveltejs/adapter-cloudflare": "^1.0.0-next.23",
+		"svelte-preprocess": "^4.10.7"
 	}
 }
