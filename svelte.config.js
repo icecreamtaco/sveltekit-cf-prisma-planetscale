@@ -11,8 +11,8 @@ let config = {
 				alias: {
 					$root: path.resolve('./src')
 				}
-			},
-		},
+			}
+		}
 	}
 };
 

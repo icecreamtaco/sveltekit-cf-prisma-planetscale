@@ -2,6 +2,7 @@
 	"name": "sveltekit-cf-prisma-planetscale",
 	"version": "0.0.1",
 	"scripts": {
+		"postinstall": "npx prisma generate --data-proxy",
 		"dev": "svelte-kit dev",
 		"build": "svelte-kit build",
 		"package": "svelte-kit package",
@@ -15,11 +16,16 @@
 		"@sveltejs/kit": "next",
 		"prettier": "^2.6.2",
 		"prettier-plugin-svelte": "^2.7.0",
+		"prisma": "^3.15.1",
 		"svelte": "^3.44.0"
 	},
 	"type": "module",
 	"dependencies": {
+		"@prisma/client": "^3.15.1",
 		"@sveltejs/adapter-cloudflare": "^1.0.0-next.23",
+		"dotenv": "^16.0.1",
+		"env-cmd": "^10.1.0",
+		"patch-package": "^6.4.7",
 		"svelte-preprocess": "^4.10.7"
 	}
 }

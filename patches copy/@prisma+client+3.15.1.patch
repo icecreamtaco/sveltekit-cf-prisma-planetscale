@@ -1,0 +1,290 @@
+diff --git a/node_modules/@prisma/client/generator-build/index.js b/node_modules/@prisma/client/generator-build/index.js
+index 8ebaf85..ba3efcd 100644
+--- a/node_modules/@prisma/client/generator-build/index.js
++++ b/node_modules/@prisma/client/generator-build/index.js
+@@ -705,10 +705,12 @@ var require_node3 = __commonJS2({
+     exports2.inspectOpts = Object.keys(process.env).filter((key) => {
+       return /^debug_/i.test(key);
+     }).reduce((obj, key) => {
++      console.log('ENV TEST', prop)
+       const prop = key.substring(6).toLowerCase().replace(/_([a-z])/g, (_, k) => {
+         return k.toUpperCase();
+       });
+       let val = process.env[key];
++      console.log('VALley', val)
+       if (/^(yes|on|true|enabled)$/i.test(val)) {
+         val = true;
+       } else if (/^(no|off|false|disabled)$/i.test(val)) {
+@@ -750,6 +752,7 @@ var require_node3 = __commonJS2({
+     }
+     __name(log3, "log");
+     function save(namespaces) {
++      console.log('nampespsaces ', namespaces)
+       if (namespaces) {
+         process.env.DEBUG = namespaces;
+       } else {
+@@ -3176,7 +3179,10 @@ var require_npm_run_path2 = __commonJS2({
+     "use strict";
+     var path8 = require("path");
+     var pathKey = require_path_key2();
++    console.log('pathkey ', pathKey)
++    console.log('pathpath ', process.env[pathKey()])
+     var npmRunPath = /* @__PURE__ */ __name((options2) => {
++
+       options2 = {
+         cwd: process.cwd(),
+         path: process.env[pathKey()],
+@@ -3195,6 +3201,7 @@ var require_npm_run_path2 = __commonJS2({
+       result.push(execPathDir);
+       return result.concat(options2.path).join(path8.delimiter);
+     }, "npmRunPath");
++    console.log('runpath: ', process.env)
+     module2.exports = npmRunPath;
+     module2.exports.default = npmRunPath;
+     module2.exports.env = (options2) => {
+@@ -4378,6 +4385,7 @@ var require_execa2 = __commonJS2({
+     var crossSpawn = require_cross_spawn2();
+     var stripFinalNewline = require_strip_final_newline2();
+     var npmRunPath = require_npm_run_path2();
++    console.log('npm npm ', npmRunPath.env)
+     var onetime = require_onetime2();
+     var makeError = require_error3();
+     var normalizeStdio = require_stdio2();
+@@ -4388,7 +4396,9 @@ var require_execa2 = __commonJS2({
+     var DEFAULT_MAX_BUFFER = 1e3 * 1e3 * 100;
+     var getEnv = /* @__PURE__ */ __name(({ env: envOption, extendEnv, preferLocal, localDir, execPath }) => {
+       const env = extendEnv ? { ...process.env, ...envOption } : envOption;
++      console.log('PREFER LOCAL? ', preferLocal)
+       if (preferLocal) {
++        console.log('env time ', npmRunPath.env({ env, cwd: localDir, execPath }))
+         return npmRunPath.env({ env, cwd: localDir, execPath });
+       }
+       return env;
+@@ -4414,6 +4424,7 @@ var require_execa2 = __commonJS2({
+         ...options2
+       };
+       options2.env = getEnv(options2);
++      console.log('optiosn env ', options2.env)
+       options2.stdio = normalizeStdio(options2);
+       if (process.platform === "win32" && path8.basename(file2, ".exe") === "cmd") {
+         args.unshift("/q");
+@@ -11654,6 +11665,8 @@ var require_main3 = __commonJS2({
+       const debug11 = Boolean(options2 && options2.debug);
+       const override = Boolean(options2 && options2.override);
+       if (options2) {
++        console.log('PARSEDOPTIONS: ', options2)
++
+         if (options2.path != null) {
+           dotenvPath = _resolveHome(options2.path);
+         }
+@@ -11662,6 +11675,8 @@ var require_main3 = __commonJS2({
+         }
+       }
+       try {
++        console.log('PARSEDING: ', parsed)
++
+         const parsed = DotenvModule.parse(fs10.readFileSync(dotenvPath, { encoding }));
+         Object.keys(parsed).forEach(function(key) {
+           if (!Object.prototype.hasOwnProperty.call(process.env, key)) {
+@@ -11679,6 +11694,7 @@ var require_main3 = __commonJS2({
+             }
+           }
+         });
++        console.log('PARSED: ', parsed)
+         return { parsed };
+       } catch (e2) {
+         if (debug11) {
+@@ -31569,6 +31585,7 @@ var require_getLatestTag2 = __commonJS2({
+     var get_platform_12 = require_dist7();
+     var chalk_12 = __importDefault2(require_source2());
+     var execa_12 = __importDefault2(require_execa2());
++    console.log('ExECA 31584')
+     var node_fetch_1 = __importDefault2((init_lib(), __toCommonJS(lib_exports)));
+     var p_map_1 = __importDefault2(require_p_map3());
+     var getProxyAgent_1 = require_getProxyAgent2();
+@@ -31885,6 +31902,8 @@ var require_download2 = __commonJS2({
+     var get_platform_1 = require_dist7();
+     var chalk_1 = __importDefault(require_source2());
+     var execa_1 = __importDefault(require_execa2());
++    console.log('ExECA 31900')
++
+     var fs_1 = __importDefault(require("fs"));
+     var make_dir_1 = __importDefault(require_make_dir2());
+     var p_filter_1 = __importDefault(require_p_filter2());
+@@ -36229,6 +36248,7 @@ ${error.message}` : execaMessage;
+       var crossSpawn = require_cross_spawn();
+       var stripFinalNewline = require_strip_final_newline();
+       var npmRunPath = require_npm_run_path();
++      console.log('runrnu ', npmRunPath.env.toString())
+       var onetime = require_onetime();
+       var makeError = require_error();
+       var normalizeStdio = require_stdio();
+@@ -36237,13 +36257,16 @@ ${error.message}` : execaMessage;
+       var { mergePromise, getSpawnedPromise } = require_promise();
+       var { joinCommand, parseCommand, getEscapedCommand } = require_command();
+       var DEFAULT_MAX_BUFFER = 1e3 * 1e3 * 100;
++      console.log('getting env')
+       var getEnv = /* @__PURE__ */ __name(({ env: envOption, extendEnv, preferLocal, localDir, execPath }) => {
++        console.log('prefer local? ', preferLocal)
+         const env = extendEnv ? { ...process.env, ...envOption } : envOption;
+         if (preferLocal) {
+           return npmRunPath.env({ env, cwd: localDir, execPath });
+         }
+         return env;
+       }, "getEnv");
++      console.log('get env ', getEnv.toString())
+       var handleArguments = /* @__PURE__ */ __name((file2, args, options2 = {}) => {
+         const parsed = crossSpawn._parse(file2, args, options2);
+         file2 = parsed.command;
+@@ -36265,6 +36288,7 @@ ${error.message}` : execaMessage;
+           ...options2
+         };
+         options2.env = getEnv(options2);
++        console.log('optionsoptions ', options2)
+         options2.stdio = normalizeStdio(options2);
+         if (process.platform === "win32" && path22.basename(file2, ".exe") === "cmd") {
+           args.unshift("/q");
+@@ -36280,6 +36304,7 @@ ${error.message}` : execaMessage;
+         }
+         return value;
+       }, "handleOutput");
++      console.log('execa 4 36303')
+       var execa4 = /* @__PURE__ */ __name((file2, args, options2) => {
+         const parsed = handleArguments(file2, args, options2);
+         const command = joinCommand(file2, args);
+@@ -36354,7 +36379,10 @@ ${error.message}` : execaMessage;
+         return mergePromise(spawned, handlePromiseOnce);
+       }, "execa");
+       module2.exports = execa4;
++      console.log(' handle args 36379', module2.exports)
++
+       module2.exports.sync = (file2, args, options2) => {
++        console.log(' handle args 36379')
+         const parsed = handleArguments(file2, args, options2);
+         const command = joinCommand(file2, args);
+         const escapedCommand = getEscapedCommand(file2, args);
+@@ -36418,6 +36446,7 @@ ${error.message}` : execaMessage;
+         return execa4.sync(file2, args, options2);
+       };
+       module2.exports.node = (scriptPath, args, options2 = {}) => {
++        console.log('node exports')
+         if (args && !Array.isArray(args) && typeof args === "object") {
+           options2 = args;
+           args = [];
+@@ -56525,9 +56554,11 @@ LineStream.prototype._reencode = function(line, chunkEncoding) {
+ 
+ // ../generator-helper/src/generatorHandler.ts
+ function generatorHandler(handler) {
++  // console.log('process: ', byline(process.stdin))
+   byline(process.stdin).on("data", async (line) => {
+     const json = JSON.parse(String(line));
+     if (json.method === "generate" && json.params) {
++      console.log('params ', json.params)
+       try {
+         const result = await handler.onGenerate(json.params);
+         respond({
+@@ -56599,6 +56630,8 @@ var import_path3 = __toESM(require("path"));
+ // ../sdk/src/cli/getSchema.ts
+ var import_chalk = __toESM(require_source2());
+ var import_execa = __toESM(require_execa2());
++console.log('ExECA 56618', import_execa)
++
+ var import_fs = __toESM(require("fs"));
+ var import_path2 = __toESM(require("path"));
+ var import_read_pkg_up = __toESM(require_read_pkg_up());
+@@ -56637,6 +56670,7 @@ __name(exists3, "exists");
+ // ../sdk/src/utils/getEnvPaths.ts
+ var debug5 = src_default("prisma:loadEnv");
+ function getEnvPaths(schemaPath2, opts2 = { cwd: process.cwd() }) {
++  console.log('GETTING PATHd ' )
+   var _a2;
+   const rootEnvPath = (_a2 = getProjectRootEnvPath({ cwd: opts2.cwd })) != null ? _a2 : null;
+   const schemaEnvPathFromArgs = schemaPathToEnvPath(schemaPath2);
+@@ -56722,8 +56756,10 @@ __name(getEngineTypeFromEnvVar, "getEngineTypeFromEnvVar");
+ // ../sdk/src/utils/parseEnvValue.ts
+ var import_chalk3 = __toESM(require_source2());
+ function parseEnvValue(object) {
++  console.log('OBJECTT ', object)
+   if (object.fromEnvVar && object.fromEnvVar != "null") {
+     const value = process.env[object.fromEnvVar];
++    console.log('loading value ', value)
+     if (!value) {
+       throw new Error(`Attempted to load provider value using \`env(${object.fromEnvVar})\` but it was not present. Please ensure that ${import_chalk3.default.dim(object.fromEnvVar)} is present in your Environment Variables`);
+     }
+@@ -57425,6 +57461,8 @@ var import_engines2 = __toESM(require_dist12());
+ var import_fetch_engine4 = __toESM(require_dist11());
+ var import_chalk4 = __toESM(require_source2());
+ var import_execa2 = __toESM(require_execa2());
++console.log('ExECA 57448')
++
+ var import_function5 = __toESM(require_function());
+ var import_fs7 = __toESM(require("fs"));
+ var debug8 = src_default("prisma:getDMMF");
+@@ -57673,6 +57711,8 @@ var import_engines3 = __toESM(require_dist12());
+ var import_fetch_engine5 = __toESM(require_dist11());
+ var import_get_platform3 = __toESM(require_dist7());
+ var import_execa3 = __toESM(require_execa2());
++console.log('ExECA 57698')
++
+ var debug9 = src_default("prisma:getVersion");
+ var MAX_BUFFER2 = 1e9;
+ async function getVersion2(enginePath2, binaryName) {
+@@ -61964,6 +62004,7 @@ __name(declareInjectableEdgeEnv, "declareInjectableEdgeEnv");
+ function getSelectedEnvVarNames(datasources2) {
+   return datasources2.reduce((acc, datasource) => {
+     if (datasource.url.fromEnvVar) {
++      console.log('datasoruce ', datasource.url )
+       return [...acc, datasource.url.fromEnvVar];
+     }
+     return acc;
+@@ -61982,6 +62023,7 @@ config.inlineDatasources = ${JSON.stringify(datasources2, null, 2)}`;
+ }
+ __name(buildInlineDatasource, "buildInlineDatasource");
+ function internalToInlineDatasources(internalDatasources) {
++  console.log('internalDatasources', internalDatasources)
+   return internalDatasources.reduce((acc, ds) => {
+     acc[ds.name] = { url: ds.url };
+     return acc;
+@@ -63060,10 +63102,13 @@ var TSClient = class {
+       dataProxy: dataProxy2
+     } = this.options;
+     const envPaths = getEnvPaths(schemaPath2, { cwd: outputDir2 });
++    console.log('patjs', envPaths)
+     const relativeEnvPaths = {
+       rootEnvPath: envPaths.rootEnvPath && import_path7.default.relative(outputDir2, envPaths.rootEnvPath),
+       schemaEnvPath: envPaths.schemaEnvPath && import_path7.default.relative(outputDir2, envPaths.schemaEnvPath)
+     };
++    console.log('patjsrelative', datasources2)
++
+     const engineType = getClientEngineType(generator2);
+     if (generator2) {
+       generator2.config.engineType = engineType;
+@@ -63330,6 +63375,7 @@ async function buildClient({
+     browser: "index-browser.js"
+   }, null, 2);
+   if (dataProxy2 === true) {
++    console.log('TRU TURE')
+     fileMap2["edge.js"] = await JS(edgeTsClient, true);
+     fileMap2["edge.d.ts"] = await TS(edgeTsClient, true);
+   }
+@@ -63596,9 +63642,12 @@ __name(dmmfToTypes, "dmmfToTypes");
+ var debug10 = src_default("prisma:client:generator");
+ var pkg = require_package4();
+ var clientVersion2 = pkg.version;
++
+ if (process.argv[1] === __filename) {
++  
+   generatorHandler({
+     onManifest(config2) {
++      console.log('Config 2: ', config2)
+       const requiredEngine = getClientEngineType(config2) === "library" /* Library */ ? "libqueryEngine" : "queryEngine";
+       debug10(`requiredEngine: ${requiredEngine}`);
+       return {
+@@ -63610,6 +63659,7 @@ if (process.argv[1] === __filename) {
+       };
+     },
+     async onGenerate(options2) {
++      console.log('datasources3', options2.datasources)
+       var _a2;
+       const outputDir2 = typeof options2.generator.output === "string" ? options2.generator.output : parseEnvValue(options2.generator.output);
+       return generateClient({
