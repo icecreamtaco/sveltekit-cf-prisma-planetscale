@@ -1,7 +1,7 @@
-import { test } from '$lib/test';
+// import { test } from '$lib/test';
 
 export async function get() {
-	console.log('get', test._engineConfig.inlineDatasources);
+	console.log('get');
 
 	return {
 		status: 200
