@@ -1,7 +1,7 @@
-import { test } from '$lib/test';
+import { db } from '$lib/test';
 
 export async function get() {
-	console.log('get', test);
+	console.log('get', db);
 
 	return {
 		status: 200
