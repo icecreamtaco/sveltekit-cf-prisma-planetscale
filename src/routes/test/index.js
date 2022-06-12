@@ -1,12 +1,11 @@
-import { db } from '$lib/test';
+import { db } from '$lib/db';
 
 export async function get() {
 	let user = await db.user.findUnique({
 		where: {
-			stxAddress: 'SPE4D5ZXT0BPYGX575XF1HZBHMN3974NE5EQRC3T'
+			id: '123'
 		}
 	});
-	console.log('user found? ', user);
 
 	return {
 		status: 200,

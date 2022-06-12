@@ -2,6 +2,5 @@
 	export let user;
 </script>
 
-<h1>Hello</h1>
-
-{JSON.stringify(user)}
+<p>The below returns 'null' as expected, however when deployed on Pages i get the process error</p>
+<p>User: {JSON.stringify(user)}</p>
