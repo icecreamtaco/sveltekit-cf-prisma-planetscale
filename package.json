@@ -2,14 +2,14 @@
 	"name": "sveltekit-cf-prisma",
 	"version": "0.0.1",
 	"scripts": {
+		"generate-client": "prisma generate --data-proxy",
 		"dev": "env-cmd svelte-kit dev",
 		"build": "svelte-kit build",
 		"package": "svelte-kit package",
 		"preview": "svelte-kit preview",
 		"prepare": "svelte-kit sync",
 		"lint": "prettier --check --plugin-search-dir=. .",
-		"format": "prettier --write --plugin-search-dir=. .",
-		"postinstall": "npx prisma generate --data-proxy"
+		"format": "prettier --write --plugin-search-dir=. ."
 	},
 	"devDependencies": {
 		"@sveltejs/kit": "next",
