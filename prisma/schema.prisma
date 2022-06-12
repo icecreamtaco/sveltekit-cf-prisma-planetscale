@@ -1,10 +1,12 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["referentialIntegrity"]
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider             = "mysql"
+  url                  = env("DATABASE_URL")
+  referentialIntegrity = "prisma"
 }
 
 model user {
@@ -58,6 +60,7 @@ model notificationType {
 
   role role @relation(fields: [roleId], references: [id])
 
+
   notification notification[]
 }
 
@@ -75,8 +78,14 @@ model notification {
   recipient user @relation("Recipient", fields: [recipientId], references: [id])
 
 
+
+
   type        notificationType @relation(fields: [typeId], references: [id])
   application application      @relation(fields: [applicationId], references: [id])
+
+
+  @@index([applicationId])
+  @@index([recipientId])
 }
 
 model session {
@@ -169,21 +178,19 @@ model applicationType {
 }
 
 model comment {
-  id              Int      @id @unique @default(autoincrement())
-  userId          String
-  text            String
-  parentCommentId Int
-  applicationId   Int
-  componentId     Int
-  createdAt       DateTime @default(now())
+  id            Int      @id @unique @default(autoincrement())
+  userId        String
+  text          String
+  applicationId Int
+  componentId   Int
+  createdAt     DateTime @default(now())
 
+  user        user        @relation(fields: [userId], references: [id])
+  application application @relation(fields: [applicationId], references: [id])
+  component   component   @relation(fields: [componentId], references: [id])
 
-  user          user        @relation(fields: [userId], references: [id])
-  application   application @relation(fields: [applicationId], references: [id])
-  parentComment comment     @relation("ParentComment", fields: [parentCommentId], references: [id])
-  component     component   @relation(fields: [componentId], references: [id])
-
-  ParentComment comment[] @relation("ParentComment")
+  @@index([applicationId])
+  @@index([componentId])
 }
 
 model commentMention {
