@@ -1,3 +1,9 @@
 import { PrismaClient } from '@prisma/client/edge';
 
-export const db = new PrismaClient();
+import { browser } from '$app/env';
+
+if (!browser) {
+	db = new PrismaClient();
+}
+
+export let db;
