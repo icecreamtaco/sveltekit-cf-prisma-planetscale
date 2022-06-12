@@ -6,11 +6,10 @@ let config = {
 	kit: {
 		adapter: adapter()
 	},
+
 	vite: {
-		vite: {
-			define: {
-				process: {}
-			}
+		define: {
+			process: {}
 		}
 	}
 };
