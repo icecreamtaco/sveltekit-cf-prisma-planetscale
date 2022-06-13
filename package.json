@@ -3,7 +3,7 @@
 	"version": "0.0.1",
 	"scripts": {
 		"dev": "env-cmd svelte-kit dev",
-		"build": "svelte-kit build",
+		"build": "env-cmd svelte-kit build",
 		"package": "svelte-kit package",
 		"preview": "env-cmd svelte-kit preview",
 		"prepare": "svelte-kit sync",
@@ -15,6 +15,7 @@
 		"@sveltejs/kit": "next",
 		"prettier": "^2.5.1",
 		"prettier-plugin-svelte": "^2.5.0",
+		"prisma": "^3.15.1",
 		"process": "^0.11.10",
 		"svelte": "^3.44.0",
 		"svelte-check": "^2.2.6",
@@ -24,7 +25,6 @@
 	"dependencies": {
 		"@prisma/client": "^3.15.1",
 		"@sveltejs/adapter-cloudflare": "^1.0.0-next.21",
-		"env-cmd": "^10.1.0",
-		"prisma": "^3.15.1"
+		"env-cmd": "^10.1.0"
 	}
 }
