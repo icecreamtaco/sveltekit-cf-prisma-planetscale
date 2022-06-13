@@ -57,5 +57,3 @@
 </script>
 
 <button on:click={login}>Sign In</button>
-
-<a href="/auth/connect/discord"><button>Discord Connect</button></a>
