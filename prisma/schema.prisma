@@ -296,6 +296,9 @@ model answer {
   application application    @relation(fields: [applicationId], references: [id])
   question    question       @relation(fields: [questionId], references: [id])
   option      questionOption @relation(fields: [optionId], references: [id])
+
+  @@index([userId])
+  @@index([applicationId])
 }
 
 model questionComponent {
