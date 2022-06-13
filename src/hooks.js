@@ -3,7 +3,8 @@ import jwt from '@tsndr/cloudflare-worker-jwt';
 import { db } from '$root/lib/db';
 
 import * as constants from '$root/lib/constants';
-import crypto from 'webcrypto';
+import sha256 from 'crypto-js/sha256.js';
+import Base64 from 'crypto-js/enc-base64.js';
 
 export const handle = async ({ event, resolve }) => {
 	let response;
@@ -42,10 +43,9 @@ export const handle = async ({ event, resolve }) => {
 					console.log('refresh token valid, validating hash against db...');
 					const { userId } = jwt.decode(refreshToken).payload;
 
-					const refreshTokenHash = crypto
-						.createHash('sha256')
-						.update(refreshToken, 'utf8')
-						.digest('hex');
+					const refreshTokenHash = Base64.stringify(
+						sha256(refreshToken + import.meta.env.VITE_REFRESH_TOKEN_SECRET)
+					);
 
 					let matchesDBToken = await compareRefreshTokenHashToDB(event, userId, refreshTokenHash);
 

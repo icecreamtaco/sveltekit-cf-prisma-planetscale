@@ -3,7 +3,8 @@ import { db } from '$root/lib/db';
 import { verifyMessageSignature } from 'micro-stacks/connect';
 import jwt from '@tsndr/cloudflare-worker-jwt';
 import * as constants from '$root/lib/constants';
-import crypto from 'crypto';
+import sha256 from 'crypto-js/sha256.js';
+import Base64 from 'crypto-js/enc-base64.js';
 import { v4 as uuidv4 } from 'uuid';
 
 export const post = async ({ request }) => {
@@ -44,7 +45,10 @@ export const post = async ({ request }) => {
 					{ userId, exp: Math.floor(Date.now() / 1000) + constants.REFRESH_TOKEN_EXPIRE_TIME },
 					import.meta.env.VITE_REFRESH_TOKEN_SECRET
 				);
-				refreshTokenHash = crypto.createHash('sha256').update(refreshToken, 'utf8').digest('hex');
+				// refreshTokenHash = crypto.createHash('sha256').update(refreshToken, 'utf8').digest('hex');
+				refreshTokenHash = Base64.stringify(
+					sha256(refreshToken + import.meta.env.VITE_REFRESH_TOKEN_SECRET)
+				);
 
 				user = await db.session.upsert({
 					where: {
@@ -73,7 +77,9 @@ export const post = async ({ request }) => {
 					{ userId, exp: Math.floor(Date.now() / 1000) + constants.REFRESH_TOKEN_EXPIRE_TIME },
 					import.meta.env.VITE_REFRESH_TOKEN_SECRET
 				);
-				refreshTokenHash = crypto.createHash('sha256').update(refreshToken, 'utf8').digest('hex');
+				refreshTokenHash = Base64.stringify(
+					sha256(refreshToken + import.meta.env.VITE_REFRESH_TOKEN_SECRET)
+				);
 
 				const createUser = db.user.create({
 					data: {
