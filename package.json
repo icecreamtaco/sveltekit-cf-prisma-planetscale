@@ -2,10 +2,10 @@
 	"name": "sveltekit-cf-prisma",
 	"version": "0.0.1",
 	"scripts": {
-		"dev": "env-cmd svelte-kit dev",
+		"dev": "svelte-kit dev",
 		"build": "svelte-kit build",
 		"package": "svelte-kit package",
-		"preview": "env-cmd svelte-kit preview",
+		"preview": "svelte-kit preview",
 		"prepare": "svelte-kit sync",
 		"lint": "prettier --check --plugin-search-dir=. .",
 		"format": "prettier --write --plugin-search-dir=. .",
