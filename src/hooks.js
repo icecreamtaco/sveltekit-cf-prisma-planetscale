@@ -3,7 +3,7 @@ import jwt from '@tsndr/cloudflare-worker-jwt';
 import { db } from '$root/lib/db';
 
 import * as constants from '$root/lib/constants';
-import crypto from 'crypto';
+import crypto from 'webcrypto';
 
 export const handle = async ({ event, resolve }) => {
 	let response;
