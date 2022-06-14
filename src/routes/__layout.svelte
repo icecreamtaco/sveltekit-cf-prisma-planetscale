@@ -12,8 +12,6 @@
 
 <slot />
 
-<h1>jjjjjjjjj</h1>
-
 <!-- <Footer /> -->
 <style>
 	/* @font-face {

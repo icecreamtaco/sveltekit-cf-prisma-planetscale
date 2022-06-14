@@ -5,6 +5,3 @@
 
 <Menu />
 <MobileMenu />
-
-<style>
-</style>
