@@ -11,7 +11,7 @@
 			<a href="/blog">Blog</a>
 		</li>
 		<li>
-			<a href="/about">About</a>
+			<a href="/about">Projects</a>
 		</li>
 	</span>
 	<span>
@@ -27,14 +27,15 @@
 		display: flex;
 		list-style: none;
 		justify-content: space-between;
-		gap: 10px;
+		padding: 20px;
 	}
 
 	span {
 		display: flex;
-		gap: 10px;
+		gap: 30px;
 	}
 
 	a {
+		text-decoration: none;
 	}
 </style>
