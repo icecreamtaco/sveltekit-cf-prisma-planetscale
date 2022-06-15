@@ -73,7 +73,7 @@
 		display: flex;
 		list-style: none;
 		justify-content: space-between;
-		padding: 20px;
+		padding: 30px;
 		color: #2d3748;
 	}
 
