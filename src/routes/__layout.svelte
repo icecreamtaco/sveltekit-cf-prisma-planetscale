@@ -1,7 +1,7 @@
 <script>
 	import { session } from '$app/stores';
 
-	import Nav from '$root/components/navigation/Nav.svelte';
+	import Nav from '$root/components/navigation/nav.svelte';
 </script>
 
 <svelte:head>
