@@ -25,9 +25,9 @@ export const handle = async ({ event, resolve }) => {
 				console.log('is valid: ', isValid);
 				if (isValid) {
 					console.log('access token valid, generating new access token');
-					const { userId } = jwt.decode(accessToken).payload;
-					accessToken = await generateAccessToken(userId);
-					event.locals.userId = userId;
+					let { session } = jwt.decode(accessToken).payload;
+					accessToken = await generateAccessToken(session);
+					event.locals = session;
 					response = await resolve(event);
 					response = setAccessTokenCookie(response, accessToken);
 					return response;
@@ -41,18 +41,22 @@ export const handle = async ({ event, resolve }) => {
 
 				if (isValid) {
 					console.log('refresh token valid, validating hash against db...');
-					const { userId } = jwt.decode(refreshToken).payload;
+					let { session } = jwt.decode(accessToken).payload;
 
 					const refreshTokenHash = Base64.stringify(
 						sha256(refreshToken + import.meta.env.VITE_REFRESH_TOKEN_SECRET)
 					);
 
-					let matchesDBToken = await compareRefreshTokenHashToDB(event, userId, refreshTokenHash);
+					let matchesDBToken = await compareRefreshTokenHashToDB(
+						event,
+						session.userId,
+						refreshTokenHash
+					);
 
 					if (matchesDBToken) {
 						console.log('matches db, generating new access token...');
-						accessToken = await generateAccessToken(userId);
-						event.locals.userId = userId;
+						accessToken = await generateAccessToken(session.userId);
+						event.locals = session;
 						response = await resolve(event);
 						response = setAccessTokenCookie(response, accessToken);
 						console.log('done');
@@ -123,9 +127,9 @@ function setAccessTokenCookie(response, accessToken) {
 	return response;
 }
 
-async function generateAccessToken(userId) {
+async function generateAccessToken(session) {
 	let accessToken = await jwt.sign(
-		{ userId, exp: Math.floor(Date.now() / 1000) + constants.ACCESS_TOKEN_EXPIRE_TIME },
+		{ session, exp: Math.floor(Date.now() / 1000) + constants.ACCESS_TOKEN_EXPIRE_TIME },
 		import.meta.env.VITE_ACCESS_TOKEN_SECRET
 	);
 	return accessToken;

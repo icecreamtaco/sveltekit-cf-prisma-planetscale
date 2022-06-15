@@ -1,6 +1,6 @@
 <script>
-	import Menu from './Menu.svelte';
-	import MobileMenu from './MobileMenu.svelte';
+	import Menu from './menu.svelte';
+	import MobileMenu from './mobileMenu.svelte';
 </script>
 
 <Menu />

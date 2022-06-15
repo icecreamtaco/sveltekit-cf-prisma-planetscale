@@ -7,7 +7,7 @@ export const post = async ({ request }) => {
 
 	let { userId } = body;
 
-	const session = await db.session.update({
+	await db.session.update({
 		where: {
 			userId_device: {
 				userId,

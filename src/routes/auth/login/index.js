@@ -37,12 +37,13 @@ export const post = async ({ request }) => {
 			if (user) {
 				// update or create new session token
 				userId = user.id;
+				let session = { userId, stxAddress };
 				accessToken = await jwt.sign(
-					{ userId, exp: Math.floor(Date.now() / 1000) + constants.ACCESS_TOKEN_EXPIRE_TIME },
+					{ session, exp: Math.floor(Date.now() / 1000) + constants.ACCESS_TOKEN_EXPIRE_TIME },
 					import.meta.env.VITE_ACCESS_TOKEN_SECRET
 				);
 				refreshToken = await jwt.sign(
-					{ userId, exp: Math.floor(Date.now() / 1000) + constants.REFRESH_TOKEN_EXPIRE_TIME },
+					{ session, exp: Math.floor(Date.now() / 1000) + constants.REFRESH_TOKEN_EXPIRE_TIME },
 					import.meta.env.VITE_REFRESH_TOKEN_SECRET
 				);
 				// refreshTokenHash = crypto.createHash('sha256').update(refreshToken, 'utf8').digest('hex');
@@ -70,11 +71,11 @@ export const post = async ({ request }) => {
 				userId = uuidv4();
 
 				accessToken = await jwt.sign(
-					{ userId, exp: Math.floor(Date.now() / 1000) + constants.ACCESS_TOKEN_EXPIRE_TIME },
+					{ session, exp: Math.floor(Date.now() / 1000) + constants.ACCESS_TOKEN_EXPIRE_TIME },
 					import.meta.env.VITE_ACCESS_TOKEN_SECRET
 				);
 				refreshToken = await jwt.sign(
-					{ userId, exp: Math.floor(Date.now() / 1000) + constants.REFRESH_TOKEN_EXPIRE_TIME },
+					{ session, exp: Math.floor(Date.now() / 1000) + constants.REFRESH_TOKEN_EXPIRE_TIME },
 					import.meta.env.VITE_REFRESH_TOKEN_SECRET
 				);
 				refreshTokenHash = Base64.stringify(
@@ -102,7 +103,8 @@ export const post = async ({ request }) => {
 			return {
 				status: 200,
 				body: {
-					userId
+					userId,
+					stxAddress
 				},
 				headers: {
 					'Set-Cookie': [

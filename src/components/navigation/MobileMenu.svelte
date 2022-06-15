@@ -1,5 +1,5 @@
 <script>
-	import NavLinks from './NavLinks.svelte';
+	import NavLinks from './navLinks.svelte';
 
 	import { page } from '$app/stores';
 	let open = false;

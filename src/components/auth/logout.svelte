@@ -1,6 +1,5 @@
 <script>
 	import { session } from '$app/stores';
-	import { user } from '$lib/stores.js';
 
 	export async function logout() {
 		await fetch('/auth/logout', {
@@ -13,9 +12,8 @@
 
 		session.update(() => null);
 	}
-	let userObj = JSON.parse($user);
-	let mainnetAddress = userObj.addresses.mainnet;
-	let walletAddress = mainnetAddress.slice(0, 4) + '...' + mainnetAddress.slice(-4);
+
+	let walletAddress = $session.stxAddress.slice(0, 4) + '...' + $session.stxAddress.slice(-4);
 </script>
 
 <p on:click={logout}>{walletAddress}</p>
