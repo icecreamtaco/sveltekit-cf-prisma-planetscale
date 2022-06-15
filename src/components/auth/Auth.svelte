@@ -3,7 +3,6 @@
 
 	import Login from './Login.svelte';
 	import Logout from './Logout.svelte';
-	let open = false;
 </script>
 
 <button>
