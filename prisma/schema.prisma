@@ -10,45 +10,33 @@ datasource db {
 }
 
 model user {
-  id         String   @id
-  stxAddress String   @unique
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @default(now())
+  id         String @id
+  stxAddress String @unique
+  roleId     Int
 
-  userRole userRole[]
-  session  session[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
 
-  Sender                notification[]          @relation("Sender")
-  Recipient             notification[]          @relation("Recipient")
-  userApplicationFollow userApplicationFollow[]
-  comment               comment[]
-  commentMention        commentMention[]
-  applicationMember     applicationMember[]
-  answer                answer[]
-  revision              revision[]
-  application           application[]
+  role role @relation(fields: [roleId], references: [id])
+
+
+  session session[]
+
+  Sender            notification[]      @relation("Sender")
+  Recipient         notification[]      @relation("Recipient")
+  userProjectFollow userProjectFollow[]
+  comment           comment[]
+  projectMember     projectMember[]
+  answer            answer[]
+  project           project[]
 }
 
 model role {
   id               Int                @id @unique @default(autoincrement())
   name             String
-  description      String
   createdAt        DateTime           @default(now())
-  userRole         userRole[]
   notificationType notificationType[]
-}
-
-model userRole {
-  id Int @id @unique @default(autoincrement())
-
-  userId String
-  roleId Int
-
-  user user @relation(fields: [userId], references: [id])
-  role role @relation(fields: [roleId], references: [id])
-
-
-  @@unique([userId, roleId])
+  user             user[]
 }
 
 model notificationType {
@@ -65,26 +53,23 @@ model notificationType {
 }
 
 model notification {
-  id            Int      @id @unique @default(autoincrement())
-  typeId        Int
-  applicationId Int
-  senderId      String
-  recipientId   String
-  message       String
-  isRead        Boolean
-  createdAt     DateTime @default(now())
+  id          Int      @id @unique @default(autoincrement())
+  typeId      Int
+  projectId   Int
+  senderId    String
+  recipientId String
+  message     String
+  isRead      Boolean
+  createdAt   DateTime @default(now())
 
   sender    user @relation("Sender", fields: [senderId], references: [id])
   recipient user @relation("Recipient", fields: [recipientId], references: [id])
 
+  type    notificationType @relation(fields: [typeId], references: [id])
+  project project          @relation(fields: [projectId], references: [id])
 
 
-
-  type        notificationType @relation(fields: [typeId], references: [id])
-  application application      @relation(fields: [applicationId], references: [id])
-
-
-  @@index([applicationId])
+  @@index([projectId])
   @@index([recipientId])
 }
 
@@ -101,21 +86,21 @@ model session {
   @@unique([userId, device])
 }
 
-model userApplicationFollow {
+model userProjectFollow {
   id Int @id @unique @default(autoincrement())
 
-  userId        String
-  applicationId Int
-  createdAt     DateTime @default(now())
+  userId    String
+  projectId Int
+  createdAt DateTime @default(now())
 
-  user        user        @relation(fields: [userId], references: [id])
-  application application @relation(fields: [applicationId], references: [id])
+  user    user    @relation(fields: [userId], references: [id])
+  project project @relation(fields: [projectId], references: [id])
 
 
-  @@unique([userId, applicationId])
+  @@unique([userId, projectId])
 }
 
-model application {
+model project {
   id        Int      @id @unique @default(autoincrement())
   title     String
   userId    String
@@ -124,33 +109,30 @@ model application {
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
 
-  user                  user                    @relation(fields: [userId], references: [id])
-  userApplicationFollow userApplicationFollow[]
-  payment               payment[]
+  user              user                @relation(fields: [userId], references: [id])
+  userProjectFollow userProjectFollow[]
+  payment           payment[]
 
-  type   applicationType   @relation(fields: [typeId], references: [id])
-  status applicationStatus @relation(fields: [statusId], references: [id])
+  type   projectType   @relation(fields: [typeId], references: [id])
+  status projectStatus @relation(fields: [statusId], references: [id])
 
-  commentMention       commentMention[]
-  applicationMember    applicationMember[]
-  answer               answer[]
-  revision             revision[]
-  applicationComponent applicationComponent[]
-  notification         notification[]
-  comment              comment[]
+  projectMember projectMember[]
+  answer        answer[]
+  notification  notification[]
+  comment       comment[]
 
 }
 
 model payment {
-  id            Int @id @unique @default(autoincrement())
-  applicationId Int
-  typeId        Int
+  id        Int @id @unique @default(autoincrement())
+  projectId Int
+  typeId    Int
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
 
-  application application @relation(fields: [applicationId], references: [id])
-  type        paymentType @relation(fields: [typeId], references: [id])
+  project project     @relation(fields: [projectId], references: [id])
+  type    paymentType @relation(fields: [typeId], references: [id])
 }
 
 model paymentType {
@@ -161,153 +143,71 @@ model paymentType {
   payment payment[]
 }
 
-model applicationStatus {
-  id          Int           @id @unique @default(autoincrement())
+model projectStatus {
+  id          Int       @id @unique @default(autoincrement())
   name        String
   description String
-  createdAt   DateTime      @default(now())
-  application application[]
+  createdAt   DateTime  @default(now())
+  project     project[]
 }
 
-model applicationType {
+model projectType {
   id   Int    @id @unique @default(autoincrement())
   name String
 
-  createdAt   DateTime      @default(now())
-  application application[]
+  createdAt DateTime  @default(now())
+  project   project[]
 }
 
 model comment {
-  id            Int      @id @unique @default(autoincrement())
-  userId        String
-  text          String
-  applicationId Int
-  componentId   Int
-  createdAt     DateTime @default(now())
+  id        Int      @id @unique @default(autoincrement())
+  userId    String
+  text      String
+  projectId Int
+  createdAt DateTime @default(now())
 
-  user        user        @relation(fields: [userId], references: [id])
-  application application @relation(fields: [applicationId], references: [id])
-  component   component   @relation(fields: [componentId], references: [id])
+  user    user    @relation(fields: [userId], references: [id])
+  project project @relation(fields: [projectId], references: [id])
 
-  @@index([applicationId])
-  @@index([componentId])
+  @@index([projectId])
 }
 
-model commentMention {
-  id                     Int      @id @unique @default(autoincrement())
-  userIdMentioned        String
-  applicationIdMentioned Int
-  createdAt              DateTime @default(now())
+model projectMember {
+  id        Int      @id @unique @default(autoincrement())
+  userId    String
+  projectId Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
 
-  user        user        @relation(fields: [userIdMentioned], references: [id])
-  application application @relation(fields: [applicationIdMentioned], references: [id])
-}
-
-model applicationMember {
-  id            Int      @id @unique @default(autoincrement())
-  userId        String
-  applicationId Int
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @default(now())
+  user    user    @relation(fields: [userId], references: [id])
+  project project @relation(fields: [projectId], references: [id])
 
 
-
-  user        user        @relation(fields: [userId], references: [id])
-  application application @relation(fields: [applicationId], references: [id])
-
-
-  @@unique([userId, applicationId])
-}
-
-model applicationComponent {
-  id Int @id @unique @default(autoincrement())
-
-  applicationId Int
-  componentId   Int
-  order         Int
-
-  application application @relation(fields: [applicationId], references: [id])
-  component   component   @relation(fields: [componentId], references: [id])
-}
-
-model component {
-  id                   Int                    @id @unique @default(autoincrement())
-  name                 String
-  questionComponent    questionComponent[]
-  applicationComponent applicationComponent[]
-  comment              comment[]
-}
-
-model revision {
-  id            Int      @id @unique @default(autoincrement())
-  userId        String
-  applicationId Int
-  questionId    Int
-  optionId      Int
-  answer        String
-  createdAt     DateTime @default(now())
-
-  user        user           @relation(fields: [userId], references: [id])
-  application application    @relation(fields: [applicationId], references: [id])
-  question    question       @relation(fields: [questionId], references: [id])
-  option      questionOption @relation(fields: [optionId], references: [id])
+  @@unique([userId, projectId])
 }
 
 model question {
   id   Int    @id @unique @default(autoincrement())
+  name String
   text String
 
-  createdAt         DateTime            @default(now())
-  questionComponent questionComponent[]
-  revision          revision[]
-  answer            answer[]
-}
-
-model questionOption {
-  id        Int      @id @unique @default(autoincrement())
-  groupId   Int
-  order     Int
-  text      String
   createdAt DateTime @default(now())
-
-  group optionGroup @relation(fields: [groupId], references: [id])
-
-  revision revision[]
-  answer   answer[]
-}
-
-model optionGroup {
-  id             Int              @id @unique @default(autoincrement())
-  name           String
-  questionOption questionOption[]
+  answer    answer[]
 }
 
 model answer {
   id Int @id @unique @default(autoincrement())
 
-  userId        String
-  applicationId Int
-  questionId    Int
-  optionId      Int
-  answer        String
-  createdAt     DateTime @default(now())
+  userId     String
+  projectId  Int
+  questionId Int
+  answer     String
+  createdAt  DateTime @default(now())
 
-  user        user           @relation(fields: [userId], references: [id])
-  application application    @relation(fields: [applicationId], references: [id])
-  question    question       @relation(fields: [questionId], references: [id])
-  option      questionOption @relation(fields: [optionId], references: [id])
+  user     user     @relation(fields: [userId], references: [id])
+  project  project  @relation(fields: [projectId], references: [id])
+  question question @relation(fields: [questionId], references: [id])
 
   @@index([userId])
-  @@index([applicationId])
-}
-
-model questionComponent {
-  id Int @id @unique @default(autoincrement())
-
-  questionId  Int
-  componentId Int
-  orderId     Int
-
-  question  question  @relation(fields: [questionId], references: [id])
-  component component @relation(fields: [componentId], references: [id])
+  @@index([projectId])
 }
