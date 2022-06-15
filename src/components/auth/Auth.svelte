@@ -1,8 +1,8 @@
 <script>
 	import { session } from '$app/stores';
 
-	import Login from '$root/components/auth/Login.svelte';
-	import Logout from '$root/components/auth/Logout.svelte';
+	import Login from './login.svelte';
+	import Logout from './logout.svelte';
 </script>
 
 <button>
