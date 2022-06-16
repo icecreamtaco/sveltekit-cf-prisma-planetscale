@@ -6,16 +6,26 @@ generator client {
 datasource db {
   provider             = "mysql"
   url                  = "prisma://aws-us-east-1.prisma-data.com/?api_key=rsw-6iQQGBCy-PxiipJa3UARRu8BCd7Fa_A2oImPyBfobsqyKSfPVuc7wjOjTWt1"
+  // url                  = "mysql://ki7dzi5rmluj:pscale_pw_E9ioAEeKP2FanA-PeJzVXyC-1Rk9UvUenLaVIyjfsMM@nzzq3n9srfce.us-east-3.psdb.cloud/dashboard?sslaccept=strict"
   referentialIntegrity = "prisma"
 }
 
 model user {
-  id         String @id
-  stxAddress String @unique
-  roleId     Int
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  id               String   @id
+  stxAddress       String   @unique
+  roleId           Int
+  firstName        String
+  lastName         String
+  displayName      String
+  email            String
+  githubHandle     String?
+  twitterHandle    String?
+  discordHandle    String?
+  discordId        String?
+  stxWalletAddress String
+  stxWalletMemo    String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 
   role role @relation(fields: [roleId], references: [id])
 
@@ -27,8 +37,8 @@ model user {
   userProjectFollow userProjectFollow[]
   comment           comment[]
   projectMember     projectMember[]
-  answer            answer[]
   project           project[]
+  projectAnswer     projectAnswer[]
 }
 
 model role {
@@ -43,7 +53,7 @@ model notificationType {
   id        Int      @id @unique @default(autoincrement())
   name      String
   roleId    Int
-  template  String
+  template  String   @db.Text
   createdAt DateTime @default(now())
 
   role role @relation(fields: [roleId], references: [id])
@@ -58,7 +68,7 @@ model notification {
   projectId   Int
   senderId    String
   recipientId String
-  message     String
+  message     String   @db.Text
   isRead      Boolean
   createdAt   DateTime @default(now())
 
@@ -79,7 +89,7 @@ model session {
   refreshTokenHash String?
   device           String
   createdAt        DateTime @default(now())
-  updatedAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 
   user user @relation(fields: [userId], references: [id])
 
@@ -101,13 +111,15 @@ model userProjectFollow {
 }
 
 model project {
-  id        Int      @id @unique @default(autoincrement())
-  title     String
-  userId    String
-  typeId    Int
-  statusId  Int
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  id         Int      @id @unique @default(autoincrement())
+  title      String
+  userId     String
+  typeId     Int
+  statusId   Int
+  isWishlist Boolean
+  isTeam     Boolean
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 
   user              user                @relation(fields: [userId], references: [id])
   userProjectFollow userProjectFollow[]
@@ -117,10 +129,10 @@ model project {
   status projectStatus @relation(fields: [statusId], references: [id])
 
   projectMember projectMember[]
-  answer        answer[]
   notification  notification[]
   comment       comment[]
 
+  projectAnswer projectAnswer[]
 }
 
 model payment {
@@ -129,7 +141,7 @@ model payment {
   typeId    Int
 
   createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   project project     @relation(fields: [projectId], references: [id])
   type    paymentType @relation(fields: [typeId], references: [id])
@@ -152,17 +164,32 @@ model projectStatus {
 }
 
 model projectType {
-  id   Int    @id @unique @default(autoincrement())
-  name String
+  id            Int    @id @unique @default(autoincrement())
+  name          String
+  fundingStream String
+  maxFunding    String
+  redirectUrl   String
+  color         String
+  order         Int
 
   createdAt DateTime  @default(now())
   project   project[]
 }
 
+model projectQuestion {
+  id          Int      @id @unique @default(autoincrement())
+  name        String
+  description String?  @db.Text
+  type        String
+  createdAt   DateTime @default(now())
+
+  projectAnswer projectAnswer[]
+}
+
 model comment {
   id        Int      @id @unique @default(autoincrement())
   userId    String
-  text      String
+  text      String   @db.Text
   projectId Int
   createdAt DateTime @default(now())
 
@@ -177,7 +204,7 @@ model projectMember {
   userId    String
   projectId Int
   createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   user    user    @relation(fields: [userId], references: [id])
   project project @relation(fields: [projectId], references: [id])
@@ -186,27 +213,18 @@ model projectMember {
   @@unique([userId, projectId])
 }
 
-model question {
-  id   Int    @id @unique @default(autoincrement())
-  name String
-  text String
-
-  createdAt DateTime @default(now())
-  answer    answer[]
-}
-
-model answer {
+model projectAnswer {
   id Int @id @unique @default(autoincrement())
 
   userId     String
   projectId  Int
   questionId Int
-  answer     String
+  answer     String   @db.Text
   createdAt  DateTime @default(now())
 
-  user     user     @relation(fields: [userId], references: [id])
-  project  project  @relation(fields: [projectId], references: [id])
-  question question @relation(fields: [questionId], references: [id])
+  user            user            @relation(fields: [userId], references: [id])
+  project         project         @relation(fields: [projectId], references: [id])
+  projectQuestion projectQuestion @relation(fields: [questionId], references: [id])
 
   @@index([userId])
   @@index([projectId])

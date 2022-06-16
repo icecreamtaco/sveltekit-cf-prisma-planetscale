@@ -39,7 +39,7 @@ export const post = async ({ request }) => {
 			if (user) {
 				// update or create new session token
 				userId = user.id;
-				let session = { userId, stxAddress };
+				let session = { userId, stxAddress, roleId };
 				accessToken = await jwt.sign(
 					{ session, exp: Math.floor(Date.now() / 1000) + constants.ACCESS_TOKEN_EXPIRE_TIME },
 					import.meta.env.VITE_ACCESS_TOKEN_SECRET
@@ -92,6 +92,7 @@ export const post = async ({ request }) => {
 						roleId
 					}
 				});
+				console.log('create user ', createUser);
 
 				const createSession = db.session.create({
 					data: {

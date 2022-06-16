@@ -9,7 +9,11 @@
 		"prepare": "svelte-kit sync",
 		"lint": "prettier --check --plugin-search-dir=. .",
 		"format": "prettier --write --plugin-search-dir=. .",
+		"seed": "node prisma/seed.js",
 		"postinstall": "npx prisma generate --data-proxy"
+	},
+	"prisma": {
+		"seed": "node prisma/seed.js"
 	},
 	"devDependencies": {
 		"@sveltejs/kit": "next",

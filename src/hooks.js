@@ -42,6 +42,7 @@ export const handle = async ({ event, resolve }) => {
 				if (isValid) {
 					console.log('refresh token valid, validating hash against db...');
 					let { session } = jwt.decode(accessToken).payload;
+					console.log('session ', session);
 
 					const refreshTokenHash = Base64.stringify(
 						sha256(refreshToken + import.meta.env.VITE_REFRESH_TOKEN_SECRET)
