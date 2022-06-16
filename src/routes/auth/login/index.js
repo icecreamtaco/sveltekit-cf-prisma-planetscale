@@ -14,6 +14,8 @@ export const post = async ({ request }) => {
 	let { message } = body;
 	let { signature } = body;
 
+	let roleId = 1;
+
 	let device = request.headers.get('user-agent');
 
 	// check if signature valid
@@ -69,6 +71,7 @@ export const post = async ({ request }) => {
 				});
 			} else {
 				userId = uuidv4();
+				let session = { userId, stxAddress, roleId };
 
 				accessToken = await jwt.sign(
 					{ session, exp: Math.floor(Date.now() / 1000) + constants.ACCESS_TOKEN_EXPIRE_TIME },
@@ -85,7 +88,8 @@ export const post = async ({ request }) => {
 				const createUser = db.user.create({
 					data: {
 						id: userId,
-						stxAddress
+						stxAddress,
+						roleId
 					}
 				});
 
@@ -104,7 +108,8 @@ export const post = async ({ request }) => {
 				status: 200,
 				body: {
 					userId,
-					stxAddress
+					stxAddress,
+					roleId
 				},
 				headers: {
 					'Set-Cookie': [
