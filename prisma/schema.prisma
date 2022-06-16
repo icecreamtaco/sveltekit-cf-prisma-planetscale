@@ -13,7 +13,7 @@ datasource db {
 model user {
   id               String   @id
   stxAddress       String   @unique
-  roleId           Int
+  role             String   @default("user")
   firstName        String
   lastName         String
   displayName      String
@@ -27,9 +27,6 @@ model user {
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 
-  role role @relation(fields: [roleId], references: [id])
-
-
   session session[]
 
   Sender            notification[]      @relation("Sender")
@@ -41,22 +38,12 @@ model user {
   projectAnswer     projectAnswer[]
 }
 
-model role {
-  id               Int                @id @unique @default(autoincrement())
-  name             String
-  createdAt        DateTime           @default(now())
-  notificationType notificationType[]
-  user             user[]
-}
-
 model notificationType {
   id        Int      @id @unique @default(autoincrement())
   name      String
-  roleId    Int
+  role      String
   template  String   @db.Text
   createdAt DateTime @default(now())
-
-  role role @relation(fields: [roleId], references: [id])
 
 
   notification notification[]

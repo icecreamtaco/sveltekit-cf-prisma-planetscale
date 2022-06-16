@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import { projectTypes, projectQuestions, roles } from './data.js';
+import { projectTypes, projectQuestions } from './data.js';
 
 const prisma = new PrismaClient();
 
@@ -17,12 +17,6 @@ async function load() {
 			data: projectQuestions
 		});
 		console.log('Project Questions are created');
-		await prisma.role.deleteMany();
-		await prisma.$queryRaw`ALTER TABLE role AUTO_INCREMENT=1`;
-		await prisma.role.createMany({
-			data: roles
-		});
-		console.log('Roles are created');
 	} catch (e) {
 		console.log(e);
 	} finally {

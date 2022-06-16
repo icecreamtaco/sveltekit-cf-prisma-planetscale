@@ -14,8 +14,6 @@ export const post = async ({ request }) => {
 	let { message } = body;
 	let { signature } = body;
 
-	let roleId = 1;
-
 	let device = request.headers.get('user-agent');
 
 	// check if signature valid
