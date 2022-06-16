@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import { projectTypes } from './data.js';
+import { projectTypes, projectQuestions } from './data.js';
 
 const prisma = new PrismaClient();
 
@@ -11,6 +11,12 @@ async function load() {
 			data: projectTypes
 		});
 		console.log('Project Types are created');
+		await prisma.projectQuestion.deleteMany();
+		await prisma.$queryRaw`ALTER TABLE projectQuestion AUTO_INCREMENT=1`;
+		await prisma.projectQuestion.createMany({
+			data: projectQuestions
+		});
+		console.log('Project Questions are created');
 	} catch (e) {
 		console.log(e);
 	} finally {

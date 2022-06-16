@@ -98,7 +98,7 @@ export const projectTypes = [
 	}
 ];
 
-export const projectQuestion = [
+export const projectQuestions = [
 	{
 		name: 'Stacks Protocol',
 		description:

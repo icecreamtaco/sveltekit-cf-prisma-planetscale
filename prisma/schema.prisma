@@ -180,7 +180,8 @@ model projectQuestion {
   id          Int      @id @unique @default(autoincrement())
   name        String
   description String?  @db.Text
-  type        String
+  group       String
+  order       Int
   createdAt   DateTime @default(now())
 
   projectAnswer projectAnswer[]
