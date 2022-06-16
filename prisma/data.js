@@ -311,3 +311,12 @@ export const projectQuestions = [
 		order: 4
 	}
 ];
+
+export const roles = [
+	{
+		name: 'user'
+	},
+	{
+		name: 'ambassador'
+	}
+];
