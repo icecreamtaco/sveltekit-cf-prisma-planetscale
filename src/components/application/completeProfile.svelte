@@ -48,15 +48,58 @@
 			<div class="input-field-wrapper">
 				<div class="input-field">
 					<label for="first-name">First Name <sup>*</sup></label>
-					<input type="first-name" placeholder="Type here..." />
+					<input id="first-name" placeholder="Type here..." />
 				</div>
 				<div class="input-field">
 					<label for="last-name">First Name <sup>*</sup></label>
-					<input type="last-name" placeholder="Type here..." />
+					<input id="last-name" placeholder="Type here..." />
 				</div>
 			</div>
+
+			<div class="input-field-wrapper">
+				<div class="input-field">
+					<label for="user-name">User Name <sup>*</sup></label>
+					<input id="user-name" placeholder="Type here..." />
+				</div>
+				<div class="input-field">
+					<label for="Email">Email <sup>*</sup></label>
+					<input id="email" placeholder="Type here..." />
+				</div>
+			</div>
+
+			<div class="input-field-wrapper">
+				<div class="input-field">
+					<label for="discord-connect">Discord Connect<sup>*</sup></label>
+					<input id="discord-connect" placeholder="Type here..." />
+				</div>
+				<div class="input-field">
+					<label for="github-connect">Github Connect <sup>*</sup></label>
+					<input id="github-connect" placeholder="Type here..." />
+				</div>
+				<div class="input-field">
+					<label for="twitter-connect">Twitter Connect <sup>*</sup></label>
+					<input id="twitter-connect" placeholder="Type here..." />
+				</div>
+			</div>
+
+			<div class="input-field-wrapper wallet-address">
+				<div class="input-field">
+					<label for="stx-wallet-address">STX Wallet Address <sup>*</sup></label>
+					<input id="stx-wallet-address" placeholder="Type here..." />
+				</div>
+				<div class="input-field memo">
+					<label for="stx-wallet-memo">STX Wallet Memo <sup>*</sup></label>
+					<input id="stx-wallet-memo" placeholder="Type here..." />
+				</div>
+			</div>
+			<div class="no-memo">
+				<input type="checkbox" id="no-memo" /><label for="no-memo"
+					>I confirm no memo is required for the wallet address proved.</label
+				>
+			</div>
 		</div>
-		<div>
+
+		<div class="ok-button">
 			<p>
 				<svg
 					width="13"
@@ -95,7 +138,7 @@
 		padding: 0 5px;
 	}
 
-	.header div:nth-child(3) {
+	.ok-button {
 		width: 200px;
 		height: 50px;
 		background: linear-gradient(45deg, #3182ce, #97266d);
@@ -153,7 +196,8 @@
 
 	.input-field-wrapper {
 		display: flex;
-		gap: 5px;
+		gap: 15px;
+		padding: 20px 0;
 	}
 
 	.input-field {
@@ -167,7 +211,7 @@
 	}
 
 	input {
-		background: none;
+		background: rgba(0, 0, 0, 0.48);
 		border: none;
 		border-bottom: 1px solid rgba(255, 255, 255, 0.8);
 		color: #ffffff;
@@ -177,5 +221,19 @@
 
 	input::placeholder {
 		padding: 5px 0;
+	}
+
+	.wallet-address {
+		width: 100%;
+	}
+
+	.memo {
+		width: 60%;
+	}
+
+	.no-memo {
+		display: flex;
+		align-items: center;
+		gap: 5px;
 	}
 </style>
