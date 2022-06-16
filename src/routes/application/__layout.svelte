@@ -24,7 +24,9 @@
 		<span class="close-border" />
 	</div>
 </header>
-<slot />
+<div class="slot">
+	<slot />
+</div>
 <svg
 	class="stx-logo"
 	width="414"
@@ -50,6 +52,10 @@
 		padding-right: 15px;
 		padding-left: 15px;
 		padding-bottom: 80px;
+	}
+
+	.slot {
+		padding: 0 15px;
 	}
 
 	.progress {
