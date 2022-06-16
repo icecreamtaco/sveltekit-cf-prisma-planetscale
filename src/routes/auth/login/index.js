@@ -13,6 +13,7 @@ export const post = async ({ request }) => {
 	let { stxAddress } = body;
 	let { message } = body;
 	let { signature } = body;
+	let role = 'user';
 
 	let device = request.headers.get('user-agent');
 
@@ -28,16 +29,20 @@ export const post = async ({ request }) => {
 			let refreshToken;
 			let refreshTokenHash;
 
+			console.log('pOSTING1', stxAddress);
+
 			let user = await db.user.findUnique({
 				where: {
 					stxAddress
 				}
 			});
 
+			console.log('pOSTING2');
+
 			if (user) {
 				// update or create new session token
 				userId = user.id;
-				let session = { userId, stxAddress, roleId };
+				let session = { userId, stxAddress, role };
 				accessToken = await jwt.sign(
 					{ session, exp: Math.floor(Date.now() / 1000) + constants.ACCESS_TOKEN_EXPIRE_TIME },
 					import.meta.env.VITE_ACCESS_TOKEN_SECRET
@@ -69,7 +74,7 @@ export const post = async ({ request }) => {
 				});
 			} else {
 				userId = uuidv4();
-				let session = { userId, stxAddress, roleId };
+				let session = { userId, stxAddress, role };
 
 				accessToken = await jwt.sign(
 					{ session, exp: Math.floor(Date.now() / 1000) + constants.ACCESS_TOKEN_EXPIRE_TIME },
@@ -86,8 +91,7 @@ export const post = async ({ request }) => {
 				const createUser = db.user.create({
 					data: {
 						id: userId,
-						stxAddress,
-						roleId
+						stxAddress
 					}
 				});
 				console.log('create user ', createUser);
@@ -108,7 +112,7 @@ export const post = async ({ request }) => {
 				body: {
 					userId,
 					stxAddress,
-					roleId
+					role
 				},
 				headers: {
 					'Set-Cookie': [
