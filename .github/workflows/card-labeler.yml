@@ -1,0 +1,19 @@
+- name: Auto card labeler
+  # You may pin to the exact commit or the version.
+  # uses: technote-space/auto-card-labeler@d9aebbe975120473650b08b970d86265b83091fd
+  uses: technote-space/auto-card-labeler@v2.0.0
+  with:
+    # Secret GitHub API token to use for making API requests.
+    GITHUB_TOKEN: # default is ${{ github.token }}
+    # Config file name.
+    CONFIG_FILENAME: # default is card-labeler.yml
+    # Whether to search project name by regular expression.
+    SEARCH_PROJECT_BY_REGEXP: # optional, default is 
+    # RegExp flags for project.
+    SEARCH_PROJECT_REGEXP_FLAGS: # optional, default is 
+    # Whether to search column name by regular expression.
+    SEARCH_COLUMN_BY_REGEXP: # optional, default is 
+    # RegExp flags for project.
+    SEARCH_COLUMN_REGEXP_FLAGS: # optional, default is 
+    # Whether to throw an error if the project's configuration is not found.
+    PROJECT_CONFIG_IS_REQUIRED: # optional, default is false
