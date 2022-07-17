@@ -14,46 +14,10 @@ jobs:
         uses: andymckay/labeler@master
         with:
           remove-labels: "backlog, todo, grooming, groomed, working, review, done"
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          repo-token: ${{ secrets.ACCESS_TOKEN }}
       - name: "add backlog label"
         uses: andymckay/labeler@master
         if: ${{ github.event.project_card.column_id == '19053227' }}
         with:
           add-labels: 'backlog'
           repo-token: ${{ secrets.ACCESS_TOKEN }}
-      - name: "add todo label"
-        uses: andymckay/labeler@master
-        if: ${{ github.event.project_card.column_id == '15959083' }}
-        with:
-          add-labels: 'todo'
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-      - name: "add grooming label"
-        uses: andymckay/labeler@master
-        if: ${{ github.event.project_card.column_id == '15959084' }}
-        with:
-          add-labels: 'grooming'
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-      - name: "add groomed label"
-        uses: andymckay/labeler@master
-        if: ${{ github.event.project_card.column_id == '15959093' }}
-        with:
-          add-labels: 'groomed'
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-      - name: "add working label"
-        uses: andymckay/labeler@master
-        if: ${{ github.event.project_card.column_id == '15959097' }}
-        with:
-          add-labels: 'working'
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-      - name: "add review label"
-        uses: andymckay/labeler@master
-        if: ${{ github.event.project_card.column_id == '15964845' }}
-        with:
-          add-labels: 'review'
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-      - name: "add done label"
-        uses: andymckay/labeler@master
-        if: ${{ github.event.project_card.column_id == '15959100' }}
-        with:
-          add-labels: 'done'
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
