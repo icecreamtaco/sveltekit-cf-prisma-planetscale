@@ -17,3 +17,14 @@
     SEARCH_COLUMN_REGEXP_FLAGS: # optional, default is 
     # Whether to throw an error if the project's configuration is not found.
     PROJECT_CONFIG_IS_REQUIRED: # optional, default is false
+
+on:
+  project_card:
+    types: [moved]
+name: Project Card Event
+jobs:
+  triage:
+    name: Auto card labeler
+    runs-on: ubuntu-latest
+    steps:
+      - uses: technote-space/auto-card-labeler@v2
