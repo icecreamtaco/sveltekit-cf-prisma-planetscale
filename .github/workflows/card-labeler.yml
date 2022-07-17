@@ -11,7 +11,7 @@ jobs:
         uses: andymckay/labeler@master
         if: "${{ github.event.project_card.column_id == '19053227' }}"
         with:
-          add-labels: 'backlog'
+          add-labels: 'backlog, hehe'
           repo-token: "${{ secrets.ACCESS_TOKEN }}"
       - name: "remove backlog label"
         uses: andymckay/labeler@master
