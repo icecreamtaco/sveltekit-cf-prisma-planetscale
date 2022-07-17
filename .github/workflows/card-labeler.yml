@@ -6,9 +6,9 @@ on:
 jobs:
   label:
     runs-on: ubuntu-latest
-    permissions:
-      issues: write
-      pull-requests: write
+#     permissions:
+#       issues: write
+#       pull-requests: write
     steps:
       - name: "add backlog label"
         uses: andymckay/labeler@master
