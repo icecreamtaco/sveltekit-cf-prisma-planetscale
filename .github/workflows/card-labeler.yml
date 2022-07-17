@@ -10,11 +10,6 @@ jobs:
       issues: write
       pull-requests: write
     steps:
-      - name: "remove previous label"
-        uses: andymckay/labeler@master
-        with:
-          remove-labels: "backlog, todo, grooming, groomed, working, review, done"
-          repo-token: ${{ secrets.ACCESS_TOKEN }}
       - name: "add backlog label"
         uses: andymckay/labeler@master
         if: ${{ github.event.project_card.column_id == '19053227' }}
