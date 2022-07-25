@@ -2,6 +2,6 @@
       with:
         action-token: "${{ secrets.GH_TOKEN }}"
         project-url: "https://github.com/stacksgov/grants-dashboard/projects/1"
-        column-name: "Application Phase"
+        column-name: "New"
         label-name: "Initial Review in Progress"
         columns-to-ignore: ""
