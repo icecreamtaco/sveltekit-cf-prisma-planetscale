@@ -1,6 +1,6 @@
   - uses: konradpabjan/move-labeled-or-milestoned-issue@v2.0
       with:
-        action-token: "${{ secrets.GH_TOKEN }}"
+        action-token: "${{access_token}}"
         project-url: "https://github.com/stacksgov/grants-dashboard/projects/1"
         column-name: "New"
         label-name: "Initial Review in Progress"
