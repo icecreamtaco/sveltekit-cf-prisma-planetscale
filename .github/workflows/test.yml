@@ -1,6 +1,13 @@
-  - uses: konradpabjan/move-labeled-or-milestoned-issue@v2.0
+on:
+  issues:
+    types: [labeled]
+jobs:
+  Move_Labeled_Issue_On_Project_Board:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: konradpabjan/move-labeled-or-milestoned-issue@v2.0
       with:
-        action-token: "${{access_token}}"
+        action-token:  "${{access_token}}"
         project-url: "https://github.com/stacksgov/grants-dashboard/projects/1"
         column-name: "New"
         label-name: "Initial Review in Progress"
