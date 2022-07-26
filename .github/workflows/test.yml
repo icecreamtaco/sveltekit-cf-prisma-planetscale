@@ -7,8 +7,8 @@ jobs:
     steps:
     - uses: konradpabjan/move-labeled-or-milestoned-issue@v2.0
       with:
-        action-token:  "${{access_token}}"
-        project-url: "https://github.com/vidiabtc/sveltekit-cf-prisma-planetscale/projects/1"
-        column-name: "New"
+        action-token: "${{ secrets.GH_TOKEN }}"
+        project-url: "https://github.com/diopitis/sveltekit-cf-prisma-planetscale/projects/1#column-19053228"
+        column-name: "Application Phase"
         label-name: "Initial Review in Progress"
         columns-to-ignore: ""
