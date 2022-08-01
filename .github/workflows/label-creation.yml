@@ -1,0 +1,12 @@
+name: Labeling new issue
+on:
+  issues:
+      types: ['opened']
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: Renato66/auto-label@v2 # or v2.1.5
+        with:
+          repo-token: ${{ secrets.ACCESS_TOKEN }}
+          labels-not-allowed: '["1","2","3","4","5","6","bug","dependencies","documentation","duplicate","enhancement","Final Deliverable in Progress","Final Deliverable","good first issue","help wanted","In progress","invalid","Milestone 1","Milestone 10","Milestone 2","Milestone 3","Milestone 4","Milestone 5","Milestone 6","Milestone 7","Milestone 8","Milestone 9","Milestone in Progress","new","Onboarding in Progress","Onboarding Phase","Project Closed","Project Complete","Project Now Stale","question","Review in Progress","Revisions in Progress","wontfix"]'
